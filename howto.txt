@@ -1,0 +1,2 @@
+1) nodejs.org --> LTS ver download
+2) vscode 에 파일 저장 / terminal 에서 다룸
