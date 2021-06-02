@@ -14,3 +14,6 @@ var app = http.createServer(function(request,response){
 
 });
 app.listen(3000);
+//Setting
+//터미널에 node main.js 를 통해서 localhost 를 만들고
+//해당 로컬호스트는 app.listen(?) 의 ? 부분
