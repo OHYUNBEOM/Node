@@ -2,3 +2,4 @@
 2) vscode 에 파일 저장 / terminal 에서 다룸
 3) 터미널에서 node main.js 를 통해 서버를 만들어주고
 4) localhost를 통해 접속하는데 해당 도메인은 app.listen(?) 부분의 ? 가 localhost:? 로 설정됨
+5) syntax 폴더 --> js 문법 실행시 cmd / cd syntax 경로 / Node + 파일명.js
