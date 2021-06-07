@@ -1,0 +1,7 @@
+var name = 'VAR';
+//var letter='NODE JS '+name+'\n\nNODE JS NODE JS NODE '+ name+ ' JS NODE JS NODE '+name+' JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS ';
+var letter=`NODE JS ${name} 
+NODE JS NODE JS NODE ${name} JS NODE JS NODE ${name} JS NODE JS NODE JS ${1+1} NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS NODE JS`;
+console.log(letter); 
+//js 의 template 은 '' 을 사용하는것이 아니라 ``를 사용(물결(~)이랑 같이있는 기호)
+//`` 사용시 줄바꿈 기호 필요없음
