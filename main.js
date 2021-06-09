@@ -1,21 +1,39 @@
 var http = require('http');
 var fs = require('fs');
-var url=require('url');
+var url = require('url');
 var app = http.createServer(function(request,response){
     var _url = request.url;
-    var queryData=url.parse(_url,true).query;
-    //query data 에 들어가는 id --> 해당 id 가 들어감
+    var queryData = url.parse(_url, true).query;
+    var title = queryData.id;
     if(_url == '/'){
-        _url = '/index.html';
+        title = 'Welcome';
+        queryData.id='Firstpage';
     }
     if(_url == '/favicon.ico'){
         return response.writeHead(404);
     }
     response.writeHead(200);
-    response.end(fs.readFileSync(__dirname + _url));
-
+    fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
+    var template = `
+        <!doctype html>
+        <html>
+        <head>
+            <title>WEB1 - ${title}</title>
+            <meta charset="utf-8">
+        </head>
+        <body>
+        <h1><a href="/">WEB</a></h1>
+        <ul>
+            <li><a href="/?id=HTML">HTML</a></li>
+            <li><a href="/?id=CSS">CSS</a></li>
+            <li><a href="/?id=JavaScript">JavaScript</a></li>
+        </ul>
+        <h2>${title}</h2>
+        <p>${description}</p>
+        </body>
+        </html>
+        `;
+        response.end(template);
+    })
 });
 app.listen(3000);
-//Setting
-//터미널에 node main.js 를 통해서 localhost 를 만들고
-//해당 로컬호스트는 app.listen(?) 의 ? 부분
