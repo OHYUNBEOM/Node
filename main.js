@@ -9,34 +9,50 @@ var app = http.createServer(function(request,response){
     {
         if(queryData.id===undefined)
         {
-            fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
-                var title='Welcome';
-                var description = 'Hello, Node.js';
-                var template = `
-                    <!doctype html>
-                    <html>
-                    <head>
-                        <title>WEB1 - ${title}</title>
-                        <meta charset="utf-8">
-                    </head>
-                    <body>
+            fs.readdir('./data',function(error, filelist){
+            var title='Welcome';
+            var description = 'Hello, Node.js';
+            var list='<ul>';
+            var i=0;
+            while(i < filelist.length){
+                list= list+`<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;//list 목록에 filelist에 해당되는것 추가
+                i=i+1;
+            }
+
+            list=list+'</ul>';
+            var template = `
+                <!doctype html>
+                <html>
+                <head>
+                <title>WEB1 - ${title}</title>
+                <meta charset="utf-8">
+                </head>
+                <body>
                     <h1><a href="/">WEB</a></h1>
-                    <ul>
-                        <li><a href="/?id=HTML">HTML</a></li>
-                        <li><a href="/?id=CSS">CSS</a></li>
-                        <li><a href="/?id=JavaScript">JavaScript</a></li>
-                    </ul>
+                    ${list} 
                     <h2>${title}</h2>
                     <p>${description}</p>
-                    </body>
-                    </html>
-                    `;
-                    response.writeHead(200);
-                    response.end(template);
-                });
+                </body>
+                </html>
+                `;
+                response.writeHead(200);
+                response.end(template);
+                // 다음과 같은 작업을 통해서 data file 에 file 이 추가될 때 마다 알아서 원래의 형식에 맞도록 업로드가 되고 사용자가 수정해줄 필요가 없어짐
+            })
         }
         else
         {
+            fs.readdir('./data',function(error, filelist){
+                var title='Welcome';
+                var description = 'Hello, Node.js';
+                var list='<ul>';
+                var i=0;
+                while(i < filelist.length){
+                    list= list+`<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;//list 목록에 filelist에 해당되는것 추가
+                    i=i+1;
+                }
+                list=list+'</ul>';
+
             fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
                 var title = queryData.id;
                 var template = `
@@ -48,11 +64,7 @@ var app = http.createServer(function(request,response){
                     </head>
                     <body>
                     <h1><a href="/">WEB</a></h1>
-                    <ul>
-                        <li><a href="/?id=HTML">HTML</a></li>
-                        <li><a href="/?id=CSS">CSS</a></li>
-                        <li><a href="/?id=JavaScript">JavaScript</a></li>
-                    </ul>
+                    ${list}
                     <h2>${title}</h2>
                     <p>${description}</p>
                     </body>
@@ -61,6 +73,7 @@ var app = http.createServer(function(request,response){
                     response.writeHead(200);
                     response.end(template);
                 });
+            });//fs.readdir 끝나는 부분
         }
     }
     else
