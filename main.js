@@ -68,3 +68,7 @@ var app = http.createServer(function(request,response){
     }
 });
 app.listen(3000);
+
+//npm 이 지원하는 pm2 를 통해 node main.js 와 같이 main 파일을 실행시킬 수 있다
+//google 에 pm2 검색 후 npm 명령어를 통해 install
+//pm2 start main.js-->지정한 localhost에 실행되는것을 확인
