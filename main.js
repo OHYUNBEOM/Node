@@ -1,6 +1,7 @@
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
+var qs= require('querystring');
 function templateHTML(title, list,body)//코드 재사용
 {
     return `
@@ -30,7 +31,7 @@ function templatelist(filelist)
     list=list+'</ul>';
     return list;
 }
-var app = http.createServer(function(request,response){
+var app = http.createServer(function(request,response){//request:요청할 때 웹브라우저가 보낸정보 , response: 응답할 때 우리가 웹브라우저에 전송할 정보
     var _url = request.url;
     var queryData = url.parse(_url, true).query;
     var pathname=url.parse(_url,true).pathname;
@@ -68,7 +69,7 @@ var app = http.createServer(function(request,response){
             var title='WEB - CREATE';
             var list = templatelist(filelist);
             var template = templateHTML(title,list,`
-            <form action="http://localhost:3000/process_create" method="post"> 
+            <form action="http://localhost:3000/create_process" method="post"> 
             <!-- method 방식을 post로 주게되면 query 주소는 넘어오지않고 내가 지정한 action 의 주소만 넘어온다 -->
             <p><input type="text" name="title" placeholder="title"></p>
             <p>
@@ -82,6 +83,20 @@ var app = http.createServer(function(request,response){
                 response.writeHead(200);
                 response.end(template);
             })
+    }
+    else if(pathname==="/create_process")
+    {
+        var body='';
+        request.on('data',function(data){
+            body+=data;//callback 이 실행될때마다 기존의 내용에 data 를 추가해준다
+        });
+        request.on('end',function(){
+            var post=qs.parse(body);//callback 끝났을 때 post 에 그동안 추가된 body 를 저장
+            var title=post.title;
+            var description=post.description;
+        });
+        response.writeHead(200);
+        response.end('success');
     }
     else
     {
