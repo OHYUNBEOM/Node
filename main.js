@@ -13,6 +13,7 @@ function templateHTML(title, list,body)//코드 재사용
     <body>
         <h1><a href="/">WEB</a></h1>
         ${list} 
+        <a href="/create">create</a>
         ${body}
     </body>
     </html>
@@ -60,6 +61,27 @@ var app = http.createServer(function(request,response){
                 });
             });//fs.readdir 끝나는 부분
         }
+    }
+    else if(pathname==="/create")
+    {
+        fs.readdir('./data',function(error, filelist){
+            var title='WEB - CREATE';
+            var list = templatelist(filelist);
+            var template = templateHTML(title,list,`
+            <form action="http://localhost:3000/process_create" method="post"> 
+            <!-- method 방식을 post로 주게되면 query 주소는 넘어오지않고 내가 지정한 action 의 주소만 넘어온다 -->
+            <p><input type="text" name="title" placeholder="title"></p>
+            <p>
+                <textarea name="description" placeholder="description"></textarea>
+            </p>
+            <p>
+                <input type="submit">
+            </p>
+            </form>
+            `); // 동일한 코드를 함수화
+                response.writeHead(200);
+                response.end(template);
+            })
     }
     else
     {
