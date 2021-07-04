@@ -2,7 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var qs= require('querystring');
-function templateHTML(title, list,body)//코드 재사용
+function templateHTML(title, list,body,control)//코드 재사용
 {
     return `
     <!doctype html>
@@ -14,7 +14,7 @@ function templateHTML(title, list,body)//코드 재사용
     <body>
         <h1><a href="/">WEB</a></h1>
         ${list} 
-        <a href="/create">create</a>
+        ${control}
         ${body}
     </body>
     </html>
@@ -43,7 +43,9 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
             var title='Welcome';
             var description = 'Hello, Node.js';
             var list = templatelist(filelist);
-            var template = templateHTML(title,list,`<h2>${title}</h2>${description}`); // 동일한 코드를 함수화
+            var template = templateHTML(title,list,`<h2>${title}</h2>${description}`,
+            `<a href="/create">create</a>`
+            ); // 동일한 코드를 함수화
             //templateHTML 함수를 호출하는데 내가 지정해둔 title,list를 순차적으로 가져오고 크게 잡은 body 태그부분이 title 과 그에 해당하는 description 을 불러옴
                 response.writeHead(200);
                 response.end(template);
@@ -56,7 +58,9 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
             fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
                 var title = queryData.id;
                 var list = templatelist(filelist);
-                var template = templateHTML(title,list,`<h2>${title}</h2>${description}`);
+                var template = templateHTML(title,list,`<h2>${title}</h2>${description}`,
+                `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`//update 클릭 이후 update 된 해당 id 를 알기위해 ?id=${title}추가
+                );
                     response.writeHead(200);
                     response.end(template);
                 });
@@ -79,10 +83,10 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
                 <input type="submit">
             </p>
             </form>
-            `); // 동일한 코드를 함수화
-                response.writeHead(200);
-                response.end(template);
-            })
+            `,''); // 동일한 코드를 함수화 
+            response.writeHead(200);
+            response.end(template);
+            });
     }
     else if(pathname==="/create_process")
     {
