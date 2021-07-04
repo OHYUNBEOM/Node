@@ -94,9 +94,11 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
             var post=qs.parse(body);//callback 끝났을 때 post 에 그동안 추가된 body 를 저장
             var title=post.title;
             var description=post.description;
+            fs.writeFile(`data/${title}`,description,'utf8',function(err){
+                response.writeHead(302,{Location:`/?id=${title}`});//200은 성공했다는 뜻이고 302는 페이지를 다른곳으로 redirection 시켜라는 말
+                response.end();//Header 를 302 로 보냄으로써 페이지를 다른곳으로 redirection 시키고, 어디로 시키냐 --> 내가 새로 create 한 title 에 대한 title과 description 을 보여주기위해 Location 을 ${title}로 지정
+            })
         });
-        response.writeHead(200);
-        response.end('success');
     }
     else
     {
