@@ -73,7 +73,7 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
             var title='WEB - CREATE';
             var list = templatelist(filelist);
             var template = templateHTML(title,list,`
-            <form action="http://localhost:3000/create_process" method="post"> 
+            <form action="/create_process" method="post"> 
             <!-- method 방식을 post로 주게되면 query 주소는 넘어오지않고 내가 지정한 action 의 주소만 넘어온다 -->
             <p><input type="text" name="title" placeholder="title"></p>
             <p>
@@ -103,6 +103,34 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
                 response.end();//Header 를 302 로 보냄으로써 페이지를 다른곳으로 redirection 시키고, 어디로 시키냐 --> 내가 새로 create 한 title 에 대한 title과 description 을 보여주기위해 Location 을 ${title}로 지정
             })
         });
+    }
+    else if(pathname==='/update')
+    {
+        fs.readdir('./data',function(error, filelist){
+            fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
+                var title = queryData.id;
+                var list = templatelist(filelist);
+                var template = templateHTML(title,list,
+                `
+                <form action="/update_process" method="post"> 
+                <input type="hidden" name="id" value="${title}">
+                <!-- hidden 이라는 타입으로 기존의 title을 저장해둔다 -->
+                <!-- method 방식을 post로 주게되면 query 주소는 넘어오지않고 내가 지정한 action 의 주소만 넘어온다 -->
+                <p><input type="text" name="title" placeholder="title" value="${title}"></p>
+                <p>
+                    <textarea name="description" placeholder="description">${description}</textarea>
+                </p>
+                <p>
+                    <input type="submit">
+                </p>
+                </form>
+                `,
+                `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`//update 클릭 이후 update 된 해당 id 를 알기위해 ?id=${title}추가
+                );
+                    response.writeHead(200);
+                    response.end(template);
+                });
+            });
     }
     else
     {
