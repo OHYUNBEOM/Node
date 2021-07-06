@@ -88,7 +88,7 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
             response.end(template);
             });
     }
-    else if(pathname==="/create_process")
+    else if(pathname==="/create_process")//post 방식으로 들어온 data 를 받아옴
     {
         var body='';
         request.on('data',function(data){
@@ -131,6 +131,25 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
                     response.end(template);
                 });
             });
+    }
+    else if(pathname==='/update_process')
+    {
+        var body='';
+        request.on('data',function(data){
+            body+=data;//callback 이 실행될때마다 기존의 내용에 data 를 추가해준다
+        });
+        request.on('end',function(){
+            var post=qs.parse(body);//callback 끝났을 때 post 에 그동안 추가된 body 를 저장
+            var id = post.id;
+            var title=post.title;
+            var description=post.description;
+            fs.rename(`data/${id}`,`data/${title}`,function(){//css부분에서 title 을 수정했을때 css-->사용자가 바꾼 title 로 변경한다는 의미
+                fs.writeFile(`data/${title}`,description,'utf8',function(err){
+                    response.writeHead(302,{Location:`/?id=${title}`});//200은 성공했다는 뜻이고 302는 페이지를 다른곳으로 redirection 시켜라는 말
+                    response.end();//Header 를 302 로 보냄으로써 페이지를 다른곳으로 redirection 시키고, 어디로 시키냐 --> 내가 새로 create 한 title 에 대한 title과 description 을 보여주기위해 Location 을 ${title}로 지정
+                })
+            })
+        });
     }
     else
     {
