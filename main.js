@@ -58,8 +58,14 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
             fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
                 var title = queryData.id;
                 var list = templatelist(filelist);
-                var template = templateHTML(title,list,`<h2>${title}</h2>${description}`,
-                `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`//update 클릭 이후 update 된 해당 id 를 알기위해 ?id=${title}추가
+                var template = templateHTML(title,list,
+                `<h2>${title}</h2>${description}`,
+                `<a href="/create">create</a>
+                <a href="/update?id=${title}">update</a>
+                <form action="delete_process" method="post">
+                    <input type="hidden" name="id" value="${title}">
+                    <input type="submit" value="delete">
+                </form>`//update 클릭 이후 update 된 해당 id 를 알기위해 ?id=${title}추가
                 );
                     response.writeHead(200);
                     response.end(template);
