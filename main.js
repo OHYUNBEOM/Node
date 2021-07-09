@@ -65,7 +65,9 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
                 <form action="delete_process" method="post">
                     <input type="hidden" name="id" value="${title}">
                     <input type="submit" value="delete">
-                </form>`//update 클릭 이후 update 된 해당 id 를 알기위해 ?id=${title}추가
+                </form>`
+                //update 클릭 이후 update 된 해당 id 를 알기위해 ?id=${title}추가\
+                //delete button 생성
                 );
                     response.writeHead(200);
                     response.end(template);
@@ -131,8 +133,9 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
                 </p>
                 </form>
                 `,
-                `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`//update 클릭 이후 update 된 해당 id 를 알기위해 ?id=${title}추가
+                `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`
                 );
+                //update 클릭 이후 update 된 해당 id 를 알기위해 ?id=${title}추가
                     response.writeHead(200);
                     response.end(template);
                 });
@@ -155,6 +158,22 @@ var app = http.createServer(function(request,response){//request:요청할 때 �
                     response.end();//Header 를 302 로 보냄으로써 페이지를 다른곳으로 redirection 시키고, 어디로 시키냐 --> 내가 새로 create 한 title 에 대한 title과 description 을 보여주기위해 Location 을 ${title}로 지정
                 })
             })
+        });
+    }
+    else if(pathname==='/delete_process')
+    {
+        var body='';
+        request.on('data',function(data){
+            body+=data;//callback 이 실행될때마다 기존의 내용에 data 를 추가해준다
+        });
+        request.on('end',function(){
+            var post=qs.parse(body);
+            var id = post.id;//delete 는 id 값만 전송되기에 title 과 description은 필요없음
+            fs.unlink(`data/${id}`,function(error){//fs.unlink --> file 을 삭제하는 뜻 원래함수형태 : fs.unlink(path,function);
+                response.writeHead(302,{Location:`/`});//302는 페이지를 다른곳으로 redirection 시켜라는 말
+                response.end();
+            })
+            
         });
     }
     else
